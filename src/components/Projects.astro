@@ -1,0 +1,58 @@
+---
+import type { Dict } from '../i18n/types';
+import { projects } from '../data/site';
+import ProjectCard from './ProjectCard.astro';
+
+interface Props {
+  dict: Dict;
+}
+
+const { dict } = Astro.props;
+---
+
+<section id="proyectos" class="section">
+  <div class="wrap">
+    <p class="label">{dict.projects.label}</p>
+    <h2 class="display section-title">{dict.projects.heading}</h2>
+    <p class="section-intro">{dict.projects.intro}</p>
+
+    <div class="grid">
+      {
+        projects.map((project, index) => (
+          <ProjectCard
+            index={index}
+            project={project}
+            item={dict.projects.items[project.id]}
+            linkLabel={dict.projects.link}
+          />
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .section-title {
+    margin-top: 16px;
+    font-size: clamp(2rem, 5vw, 4rem);
+  }
+
+  .section-intro {
+    margin-top: 16px;
+    max-width: 52ch;
+    color: var(--color-ink-muted);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 48px;
+  }
+
+  @media (max-width: 900px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

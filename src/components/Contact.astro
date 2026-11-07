@@ -1,0 +1,69 @@
+---
+import type { Dict } from '../i18n/types';
+
+interface Props {
+  dict: Dict;
+}
+
+const { dict } = Astro.props;
+---
+
+<section id="contacto" class="section hairline">
+  <div class="wrap">
+    <div class="contact-block">
+      <p class="label">{dict.contact.label}</p>
+      <h2 class="display contact-title">{dict.contact.heading}</h2>
+      <p class="contact-lead">{dict.contact.lead}</p>
+      <a class="email display" href={`mailto:${dict.contact.emailCta}`}>{dict.contact.emailCta}</a>
+      <div class="socials">
+        {dict.contact.socials.map((s) => <a class="label" href={s.href}>{s.label}</a>)}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .contact-block {
+    max-width: 720px;
+  }
+
+  .contact-title {
+    margin-top: 16px;
+    font-size: clamp(2.25rem, 5vw, 4rem);
+  }
+
+  .contact-lead {
+    margin-top: 20px;
+    color: var(--color-ink-muted);
+  }
+
+  .email {
+    display: inline-block;
+    margin-top: 32px;
+    font-size: clamp(1.5rem, 3.4vw, 2.5rem);
+    color: var(--color-ink);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 6px;
+  }
+
+  .email:hover {
+    color: var(--color-yellow);
+  }
+
+  .socials {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 40px;
+  }
+
+  .socials a {
+    text-decoration: none;
+    color: var(--color-ink-muted);
+  }
+
+  .socials a:hover {
+    color: var(--color-ink);
+  }
+</style>

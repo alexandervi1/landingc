@@ -1,0 +1,21 @@
+---
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import Hero from '../../components/Hero.astro';
+import Projects from '../../components/Projects.astro';
+import About from '../../components/About.astro';
+import Contact from '../../components/Contact.astro';
+import Footer from '../../components/Footer.astro';
+import { en } from '../../i18n/en';
+---
+
+<Base locale="en" title={en.meta.title} description={en.meta.description} skipLabel={en.a11y.skip}>
+  <Nav locale="en" dict={en} />
+  <main id="main">
+    <Hero dict={en} />
+    <Projects dict={en} />
+    <About dict={en} />
+    <Contact dict={en} />
+  </main>
+  <Footer dict={en} />
+</Base>

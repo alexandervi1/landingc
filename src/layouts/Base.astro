@@ -1,0 +1,82 @@
+---
+import '../styles/global.css';
+import type { Locale } from '../i18n/types';
+
+interface Props {
+  locale: Locale;
+  title: string;
+  description: string;
+  skipLabel: string;
+}
+
+const { locale, title, description, skipLabel } = Astro.props;
+const site = Astro.site ?? new URL('https://alexandervillalva.dev');
+const canonical = new URL(Astro.url.pathname, site);
+const alternateEs = new URL('/', site);
+const alternateEn = new URL('/en/', site);
+const ogLocale = locale === 'es' ? 'es_EC' : 'en_US';
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <script is:inline>document.documentElement.classList.add('js')</script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="es" href={alternateEs} />
+    <link rel="alternate" hreflang="en" href={alternateEn} />
+    <link rel="alternate" hreflang="x-default" href={alternateEs} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="theme-color" content="#0d0d24" />
+    <meta name="color-scheme" content="dark" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={ogLocale} />
+  </head>
+  <body>
+    <a href="#main" class="skip">{skipLabel}</a>
+    <slot />
+    <script>
+      const nav = document.querySelector('[data-nav]');
+      const setNav = () => nav?.classList.toggle('is-scrolled', window.scrollY > 8);
+      setNav();
+      addEventListener('scroll', setNav, { passive: true });
+
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries)
+            if (e.isIntersecting) {
+              e.target.classList.add('is-visible');
+              io.unobserve(e.target);
+            }
+        },
+        { threshold: 0.15 }
+      );
+      document.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el));
+    </script>
+    <style>
+      .skip {
+        position: fixed;
+        top: 12px;
+        left: 12px;
+        z-index: 50;
+        background: var(--color-yellow);
+        color: #0d0d24;
+        padding: 10px 14px;
+        font-family: var(--font-mono);
+        font-size: 12px;
+        text-transform: uppercase;
+        transform: translateY(-200%);
+      }
+
+      .skip:focus-visible {
+        transform: none;
+      }
+    </style>
+  </body>
+</html>

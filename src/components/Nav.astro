@@ -1,0 +1,155 @@
+---
+import type { Dict, Locale } from '../i18n/types';
+import { localePath } from '../i18n/utils';
+
+interface Props {
+  locale: Locale;
+  dict: Dict;
+}
+
+const { locale, dict } = Astro.props;
+const navLabel = locale === 'es' ? 'Navegación principal' : 'Main navigation';
+const langLabel = locale === 'es' ? 'Idioma' : 'Language';
+---
+
+<header class="nav" data-nav>
+  <div class="wrap nav-inner">
+    <a class="brand" href={localePath(locale)} aria-label="Alexander Villalva">
+      <span class="display brand-mark">AV</span>
+      <span class="label brand-name">Alexander Villalva</span>
+    </a>
+
+    <div class="nav-right">
+      <nav class="nav-links" aria-label={navLabel}>
+        <a class="label" href="#proyectos">{dict.nav.projects}</a>
+        <a class="label" href="#sobre-mi">{dict.nav.about}</a>
+        <a class="label" href="#contacto">{dict.nav.contact}</a>
+      </nav>
+
+      <a class="btn btn-ghost nav-cta" href="#contacto">{dict.nav.cta}</a>
+
+      <div class="lang" role="group" aria-label={langLabel}>
+        <a
+          class="label lang-link"
+          href="/"
+          lang="es"
+          hreflang="es"
+          aria-current={locale === 'es' ? 'page' : undefined}>ES</a
+        >
+        <span class="lang-sep" aria-hidden="true">/</span>
+        <a
+          class="label lang-link"
+          href="/en/"
+          lang="en"
+          hreflang="en"
+          aria-current={locale === 'en' ? 'page' : undefined}>EN</a
+        >
+      </div>
+    </div>
+  </div>
+</header>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    border-bottom: 1px solid transparent;
+    background: transparent;
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .nav.is-scrolled {
+    background: color-mix(in srgb, var(--color-canvas) 88%, transparent);
+    backdrop-filter: blur(12px);
+    border-bottom-color: var(--color-line);
+  }
+
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    height: 64px;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--color-ink);
+  }
+
+  .brand-mark {
+    font-size: 20px;
+    letter-spacing: 0;
+    line-height: 1;
+  }
+
+  .brand-name {
+    display: none;
+  }
+
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .nav-links {
+    display: none;
+    gap: 20px;
+  }
+
+  .nav-links a,
+  .lang-link {
+    text-decoration: none;
+    color: var(--color-ink-muted);
+  }
+
+  .nav-links a:hover,
+  .lang-link:hover {
+    color: var(--color-ink);
+  }
+
+  .lang-link[aria-current='page'] {
+    color: var(--color-ink);
+  }
+
+  .nav-cta {
+    display: none;
+    height: 36px;
+    padding-inline: 14px;
+  }
+
+  .lang {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .lang-sep {
+    color: var(--color-line);
+    font-family: var(--font-mono);
+    font-size: 11px;
+  }
+
+  @media (min-width: 640px) {
+    .nav-cta {
+      display: inline-flex;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .brand-name {
+      display: inline;
+    }
+
+    .nav-links {
+      display: flex;
+    }
+  }
+</style>

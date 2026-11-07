@@ -1,0 +1,89 @@
+---
+interface Props {
+  index: number;
+  project: { id: string; year: string; stack: string[]; href: string };
+  item: { title: string; summary: string };
+  linkLabel: string;
+}
+
+const { index, project, item, linkLabel } = Astro.props;
+---
+
+<article class="card" data-reveal style={`--i:${index}`}>
+  <div class="card-top">
+    <span class="label">{String(index + 1).padStart(2, '0')}</span>
+    <span class="label">{project.year}</span>
+  </div>
+  <h3 class="display card-title">{item.title}</h3>
+  <p class="card-summary">{item.summary}</p>
+  <ul class="card-stack">
+    {project.stack.map((s) => <li class="chip">{s}</li>)}
+  </ul>
+  <a class="card-link" href={project.href}>{linkLabel} <span aria-hidden="true">→</span></a>
+</article>
+
+<style>
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 24px;
+    border: 1px solid var(--color-line);
+    background: var(--color-canvas-2);
+    transition:
+      border-color 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .card:hover {
+    border-color: var(--color-ink-muted);
+    transform: translateY(-2px);
+  }
+
+  .card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .card-title {
+    font-size: clamp(1.5rem, 2.2vw, 1.75rem);
+  }
+
+  .card-summary {
+    color: var(--color-ink-muted);
+    font-size: 15px;
+  }
+
+  .card-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .chip {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border: 1px solid var(--color-line);
+    padding: 4px 8px;
+  }
+
+  .card-link {
+    margin-top: auto;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-blue-lift);
+    text-decoration: none;
+  }
+
+  .card-link:hover {
+    color: var(--color-ink);
+  }
+</style>

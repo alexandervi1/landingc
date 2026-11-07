@@ -1,0 +1,27 @@
+---
+import type { Dict } from '../i18n/types';
+
+interface Props {
+  dict: Dict;
+}
+
+const { dict } = Astro.props;
+---
+
+<footer class="hairline">
+  <div class="wrap footer-inner">
+    <span class="label">{dict.footer.rights}</span>
+    <span class="label">{dict.footer.location}</span>
+    <span class="label">{dict.footer.built}</span>
+  </div>
+</footer>
+
+<style>
+  .footer-inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 12px;
+    padding-block: 28px;
+  }
+</style>
