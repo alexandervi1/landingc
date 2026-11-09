@@ -1,25 +1,27 @@
 ---
 import type { Dict, Locale } from '../i18n/types';
-import { projects, isPublished, projectPath } from '../data/projects';
+import { isPublished, projectPath, visibleProjects } from '../data/projects';
 import ProjectCard from './ProjectCard.astro';
 
 interface Props {
   dict: Dict;
   locale: Locale;
+  number: number;
 }
 
-const { dict, locale } = Astro.props;
+const { dict, locale, number } = Astro.props;
+const visible = visibleProjects();
 ---
 
 <section id="proyectos" class="section">
   <div class="wrap">
-    <p class="label">{dict.projects.label}</p>
+    <p class="label">{String(number).padStart(2, '0')} — {dict.projects.label}</p>
     <h2 class="display section-title">{dict.projects.heading}</h2>
     <p class="section-intro">{dict.projects.intro}</p>
 
     <div class="grid">
       {
-        projects.map((project, index) => (
+        visible.map((project, index) => (
           <ProjectCard
             index={index}
             project={project}

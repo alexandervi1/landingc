@@ -3,9 +3,10 @@ import type { Dict } from '../i18n/types';
 
 interface Props {
   dict: Dict;
+  number: number;
 }
 
-const { dict } = Astro.props;
+const { dict, number } = Astro.props;
 ---
 
 <section id="sobre-mi" class="section about">
@@ -25,7 +26,7 @@ const { dict } = Astro.props;
     </figure>
 
     <div class="about-copy">
-      <p class="label">{dict.about.label}</p>
+      <p class="label">{String(number).padStart(2, '0')} — {dict.about.label}</p>
       <h2 class="display about-title">{dict.about.heading}</h2>
       {
         dict.about.paragraphs.map((paragraph, index) => (

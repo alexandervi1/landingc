@@ -3,9 +3,10 @@ import type { Dict } from '../i18n/types';
 
 interface Props {
   dict: Dict;
+  showProjects: boolean;
 }
 
-const { dict } = Astro.props;
+const { dict, showProjects } = Astro.props;
 const [line1, line2, line3] = dict.hero.title;
 ---
 
@@ -20,8 +21,22 @@ const [line1, line2, line3] = dict.hero.title;
       </h1>
       <p class="hero-lead">{dict.hero.lead}</p>
       <div class="hero-ctas">
-        <a class="btn btn-primary" href="#proyectos">{dict.hero.ctaPrimary}</a>
-        <a class="btn btn-ghost" href="#contacto">{dict.hero.ctaSecondary}</a>
+        {
+          showProjects ? (
+            <>
+              <a class="btn btn-primary" href="#proyectos">
+                {dict.hero.ctaPrimary}
+              </a>
+              <a class="btn btn-ghost" href="#contacto">
+                {dict.hero.ctaSecondary}
+              </a>
+            </>
+          ) : (
+            <a class="btn btn-primary" href="#contacto">
+              {dict.hero.ctaSecondary}
+            </a>
+          )
+        }
       </div>
     </div>
 

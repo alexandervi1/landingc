@@ -7,15 +7,19 @@ import About from '../components/About.astro';
 import Contact from '../components/Contact.astro';
 import Footer from '../components/Footer.astro';
 import { es } from '../i18n/es';
+import { sectionNumbers } from '../i18n/utils';
+import { visibleProjects } from '../data/projects';
+
+const numbers = sectionNumbers(visibleProjects().length > 0);
 ---
 
 <Base locale="es" title={es.meta.title} description={es.meta.description} skipLabel={es.a11y.skip}>
   <Nav locale="es" dict={es} />
   <main id="main">
-    <Hero dict={es} />
-    <Projects dict={es} locale="es" />
-    <About dict={es} />
-    <Contact dict={es} locale="es" />
+    <Hero dict={es} showProjects={numbers.projects > 0} />
+    {numbers.projects > 0 && <Projects dict={es} locale="es" number={numbers.projects} />}
+    <About dict={es} number={numbers.about} />
+    <Contact dict={es} locale="es" number={numbers.contact} />
   </main>
   <Footer dict={es} locale="es" />
 </Base>

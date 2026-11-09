@@ -5,9 +5,10 @@ import { links } from '../data/site';
 interface Props {
   dict: Dict;
   locale: Locale;
+  number: number;
 }
 
-const { dict, locale } = Astro.props;
+const { dict, locale, number } = Astro.props;
 const socials = dict.contact.socials.filter((social) => links[social.id] !== '');
 const form = dict.contact.form;
 const privacyHref = locale === 'es' ? '/privacidad' : '/en/privacy';
@@ -16,7 +17,7 @@ const privacyHref = locale === 'es' ? '/privacidad' : '/en/privacy';
 <section id="contacto" class="section hairline">
   <div class="wrap">
     <div class="contact-block">
-      <p class="label">{dict.contact.label}</p>
+      <p class="label">{String(number).padStart(2, '0')} — {dict.contact.label}</p>
       <h2 class="display contact-title">{dict.contact.heading}</h2>
       <p class="contact-lead">{dict.contact.lead}</p>
       <a class="email display" href={`mailto:${dict.contact.emailCta}`}>{dict.contact.emailCta}</a>

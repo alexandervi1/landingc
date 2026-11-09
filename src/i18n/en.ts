@@ -24,7 +24,7 @@ export const en: Dict = {
     },
   },
   projects: {
-    label: '01 — Projects',
+    label: 'Projects',
     heading: 'Recent work',
     intro: 'Projects I have taken from idea to delivery.',
     link: 'View case',
@@ -40,7 +40,7 @@ export const en: Dict = {
     },
   },
   about: {
-    label: '02 — About',
+    label: 'About',
     heading: 'How I work',
     photoAlt:
       'Alexander Villalva in profile, wearing a coat and sunglasses, against a city skyline at sunset.',
@@ -69,7 +69,7 @@ export const en: Dict = {
     ],
   },
   contact: {
-    label: '03 — Contact',
+    label: 'Contact',
     heading: 'Shall we build something?',
     lead: 'Open to freelance projects and remote collaborations. I reply within 24 hours.',
     emailCta: 'hola@alexandervillalva.uk',

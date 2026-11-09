@@ -1,6 +1,7 @@
 ---
 import type { Dict, Locale } from '../i18n/types';
 import { localePath } from '../i18n/utils';
+import { visibleProjects } from '../data/projects';
 
 interface Props {
   locale: Locale;
@@ -10,6 +11,7 @@ interface Props {
 const { locale, dict } = Astro.props;
 const navLabel = locale === 'es' ? 'Navegación principal' : 'Main navigation';
 const langLabel = locale === 'es' ? 'Idioma' : 'Language';
+const hasProjects = visibleProjects().length > 0;
 ---
 
 <header class="nav" data-nav>
@@ -21,7 +23,7 @@ const langLabel = locale === 'es' ? 'Idioma' : 'Language';
 
     <div class="nav-right">
       <nav class="nav-links" id="nav-menu" aria-label={navLabel} data-nav-menu>
-        <a class="label" href="#proyectos">{dict.nav.projects}</a>
+        {hasProjects && <a class="label" href="#proyectos">{dict.nav.projects}</a>}
         <a class="label" href="#sobre-mi">{dict.nav.about}</a>
         <a class="label" href="#contacto">{dict.nav.contact}</a>
         <a class="btn btn-ghost nav-cta-mobile" href="#contacto">{dict.nav.cta}</a>
