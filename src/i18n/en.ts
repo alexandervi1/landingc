@@ -28,72 +28,15 @@ export const en: Dict = {
     heading: 'Recent work',
     intro: 'Projects I have taken from idea to delivery.',
     link: 'View case',
-    items: {
-      parking: {
-        title: 'Billing and reporting module for a parking service',
-        summary: 'Module inside a company app that digitised billing and reporting for its parking service.',
-        details: [
-          {
-            label: 'Context',
-            value:
-              'Billing and reporting were done on paper: every collector had to travel to the company to hand in the day’s report.',
-          },
-          {
-            label: 'What I built',
-            value:
-              'Backend, frontend and database. Responsive views to bill and report from mobile, with separate access for administrators and workers on top of the existing login.',
-          },
-          {
-            label: 'Result',
-            value:
-              'Reporting no longer requires travelling to the company; management checks the day’s operation from the app.',
-          },
-        ],
-        note: 'Client work. Name, metrics and internal details omitted for confidentiality.',
-      },
-      mariscos: {
-        title: 'Online store and admin panel for a seafood business',
-        summary: 'Software Engineering course project: storefront and admin panel for a local business.',
-        details: [
-          {
-            label: 'Context',
-            value:
-              'The business needed an online sales channel and a centralised way to manage products, sales and users.',
-          },
-          {
-            label: 'What I built',
-            value:
-              'Team project with another developer. We designed the database together, worked on separate modules and debugged as a pair. Implemented in plain PHP with MySQL: storefront for the customer and a panel for sales, users and catalogue management.',
-          },
-          {
-            label: 'Result',
-            value:
-              'A working system with both sides: purchase for the customer and operations for the administrator.',
-          },
-        ],
-        note: 'Academic team project. Business name omitted.',
-      },
-      unity: {
-        title: 'Interactive game for hydroelectric energy parks',
-        summary: 'Interactive experience about renewable energy for clients in the hydroelectric sector.',
-        details: [
-          {
-            label: 'Context',
-            value:
-              'Clients in the hydroelectric sector needed an interactive experience about renewable energy for their parks.',
-          },
-          {
-            label: 'What I built',
-            value:
-              'Team project with another engineer. I built the hydroelectric and solar panel scenarios and programmed their logic and interactions in C#. Part of the 3D modelling was done in Blender.',
-          },
-          {
-            label: 'Result',
-            value: 'Interactive experience delivered to the project clients.',
-          },
-        ],
-        note: 'Client work. Name and details omitted for confidentiality.',
-      },
+    labels: {
+      context: 'Context',
+      role: 'What I built',
+      decision: 'Technical decision',
+      result: 'Result',
+      precision: 'Data precision',
+      stack: 'Stack',
+      year: 'Year',
+      links: 'Links',
     },
   },
   about: {

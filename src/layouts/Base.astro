@@ -10,6 +10,7 @@ interface Props {
   skipLabel: string;
   alternateEs?: string;
   alternateEn?: string;
+  jsonLd?: Record<string, unknown>;
 }
 
 const {
@@ -19,6 +20,7 @@ const {
   skipLabel,
   alternateEs = '/',
   alternateEn = '/en/',
+  jsonLd,
 } = Astro.props;
 const siteUrl = Astro.site ?? new URL('https://alexandervillalva.uk');
 const canonical = new URL(Astro.url.pathname, siteUrl);
@@ -83,6 +85,7 @@ const person = {
     <meta name="twitter:image:alt" content={ogImageAlt} />
 
     <script type="application/ld+json" is:inline set:html={JSON.stringify(person)} />
+    {jsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />}
   </head>
   <body>
     <a href="#main" class="skip">{skipLabel}</a>

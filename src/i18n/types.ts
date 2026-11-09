@@ -20,10 +20,16 @@ export interface Dict {
     heading: string;
     intro: string;
     link: string;
-    items: Record<
-      ProjectId,
-      { title: string; summary: string; details?: { label: string; value: string }[]; note?: string }
-    >;
+    labels: {
+      context: string;
+      role: string;
+      decision: string;
+      result: string;
+      precision: string;
+      stack: string;
+      year: string;
+      links: string;
+    };
   };
   about: {
     label: string;

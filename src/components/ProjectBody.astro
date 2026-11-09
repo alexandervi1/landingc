@@ -1,0 +1,152 @@
+---
+import type { Dict, Locale } from '../i18n/types';
+import type { Project } from '../data/projects';
+
+interface Props {
+  project: Project;
+  locale: Locale;
+  dict: Dict;
+}
+
+const { project, locale, dict } = Astro.props;
+const content = project.content[locale];
+const labels = dict.projects.labels;
+const home = locale === 'es' ? '/' : '/en/';
+---
+
+<section class="section">
+  <div class="wrap case">
+    <a class="label case-back" href={`${home}#proyectos`}>← {dict.projects.heading}</a>
+
+    <p class="label case-year">{labels.year} {project.year}</p>
+    <h1 class="display case-title">{content.title}</h1>
+    <p class="case-summary">{content.summary}</p>
+
+    <ul class="case-stack">
+      {project.stack.map((item) => <li class="chip">{item}</li>)}
+    </ul>
+
+    <dl class="case-fields">
+      <div>
+        <dt class="label">{labels.context}</dt>
+        <dd>{content.context}</dd>
+      </div>
+      <div>
+        <dt class="label">{labels.role}</dt>
+        <dd>{content.role}</dd>
+      </div>
+      <div>
+        <dt class="label">{labels.decision}</dt>
+        <dd>{content.decision}</dd>
+      </div>
+      <div>
+        <dt class="label">{labels.result}</dt>
+        <dd>{content.result}</dd>
+      </div>
+      <div>
+        <dt class="label">{labels.precision}</dt>
+        <dd>{content.precision}</dd>
+      </div>
+    </dl>
+
+    {
+      (project.links.demo || project.links.repo) && (
+        <div class="case-links">
+          <p class="label">{labels.links}</p>
+          {project.links.demo && <a href={project.links.demo}>{project.links.demo}</a>}
+          {project.links.repo && <a href={project.links.repo}>{project.links.repo}</a>}
+        </div>
+      )
+    }
+
+    {content.note && <p class="case-note">{content.note}</p>}
+  </div>
+</section>
+
+<style>
+  .case {
+    max-width: 760px;
+  }
+
+  .case-back {
+    text-decoration: none;
+    color: var(--color-ink-muted);
+  }
+
+  .case-back:hover {
+    color: var(--color-ink);
+  }
+
+  .case-year {
+    margin-top: 40px;
+  }
+
+  .case-title {
+    margin-top: 16px;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+  }
+
+  .case-summary {
+    margin-top: 20px;
+    color: var(--color-ink-muted);
+  }
+
+  .case-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 24px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .chip {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border: 1px solid var(--color-line);
+    padding: 4px 8px;
+  }
+
+  .case-fields {
+    display: grid;
+    gap: 24px;
+    margin: 40px 0 0;
+  }
+
+  .case-fields > div {
+    padding-top: 16px;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .case-fields dd {
+    margin: 8px 0 0;
+    color: var(--color-ink-muted);
+  }
+
+  .case-links {
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .case-links a {
+    display: block;
+    margin-top: 8px;
+    color: var(--color-blue-lift);
+    text-decoration: none;
+  }
+
+  .case-links a:hover {
+    color: var(--color-ink);
+  }
+
+  .case-note {
+    margin-top: 32px;
+    padding: 16px;
+    border: 1px solid var(--color-line-strong);
+    font-size: 14px;
+    color: var(--color-ink-muted);
+  }
+</style>

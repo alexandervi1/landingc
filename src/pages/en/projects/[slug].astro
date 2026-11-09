@@ -1,0 +1,52 @@
+---
+import Base from '../../../layouts/Base.astro';
+import Nav from '../../../components/Nav.astro';
+import Footer from '../../../components/Footer.astro';
+import ProjectBody from '../../../components/ProjectBody.astro';
+import { en } from '../../../i18n/en';
+import { site } from '../../../data/site';
+import { publishedProjects, projectPath, type Project } from '../../../data/projects';
+
+export function getStaticPaths() {
+  return publishedProjects().map((project) => ({
+    params: { slug: project.id },
+    props: { project },
+  }));
+}
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+const content = project.content.en;
+const path = projectPath(project, 'en');
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CreativeWork',
+  name: content.title,
+  abstract: content.context,
+  dateCreated: project.year,
+  inLanguage: 'en',
+  url: new URL(path, Astro.site ?? 'https://alexandervillalva.uk').href,
+  author: { '@type': 'Person', name: site.name, url: new URL('/', Astro.site ?? 'https://alexandervillalva.uk').href },
+  keywords: project.stack.join(', '),
+};
+---
+
+<Base
+  locale="en"
+  title={`${content.title} — ${site.name}`}
+  description={content.summary}
+  skipLabel={en.a11y.skip}
+  alternateEs={projectPath(project, 'es')}
+  alternateEn={projectPath(project, 'en')}
+  jsonLd={jsonLd}
+>
+  <Nav locale="en" dict={en} />
+  <main id="main">
+    <ProjectBody project={project} locale="en" dict={en} />
+  </main>
+  <Footer dict={en} locale="en" />
+</Base>

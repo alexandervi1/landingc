@@ -1,13 +1,14 @@
 ---
-import type { Dict } from '../i18n/types';
-import { projects } from '../data/site';
+import type { Dict, Locale } from '../i18n/types';
+import { projects, isPublished, projectPath } from '../data/projects';
 import ProjectCard from './ProjectCard.astro';
 
 interface Props {
   dict: Dict;
+  locale: Locale;
 }
 
-const { dict } = Astro.props;
+const { dict, locale } = Astro.props;
 ---
 
 <section id="proyectos" class="section">
@@ -22,8 +23,10 @@ const { dict } = Astro.props;
           <ProjectCard
             index={index}
             project={project}
-            item={dict.projects.items[project.id]}
+            locale={locale}
             linkLabel={dict.projects.link}
+            labels={dict.projects.labels}
+            href={isPublished(project) ? projectPath(project, locale) : ''}
           />
         ))
       }

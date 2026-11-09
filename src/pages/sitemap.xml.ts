@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro';
+import { publishedProjects, projectPath } from '../data/projects';
 
 export const GET: APIRoute = ({ site }) => {
   const base = site ?? new URL('https://alexandervillalva.uk');
@@ -9,6 +10,12 @@ export const GET: APIRoute = ({ site }) => {
     { path: '/en/', es: '/', en: '/en/' },
     { path: '/en/privacy', es: '/privacidad', en: '/en/privacy' },
   ];
+
+  for (const project of publishedProjects()) {
+    const es = projectPath(project, 'es');
+    const en = projectPath(project, 'en');
+    pages.push({ path: es, es, en }, { path: en, es, en });
+  }
 
   const urls = pages.map((page) => {
     const loc = new URL(page.path, base).href;
