@@ -65,19 +65,20 @@ for (const dir of TARGETS) {
   }
 }
 
-// Un caso marcado como publicado no puede tener campos pendientes ni vacíos.
+// Un caso marcado como publicado o visible no puede tener campos pendientes ni vacíos.
 const projectsSource = await readFile(PROJECTS_FILE, 'utf8').catch(() => null);
 if (projectsSource) {
-  for (const match of projectsSource.matchAll(/published:\s*true/g)) {
+  for (const match of projectsSource.matchAll(/(published|visibleOnHome):\s*true/g)) {
     const block = enclosingBlock(projectsSource, match.index);
     if (!block) continue;
 
     const line = projectsSource.slice(0, block.start).split('\n').length;
+    const flag = match[1];
     if (/\[COMPLETAR\]|\bPENDING\b/.test(block.text)) {
-      problems.push(`${PROJECTS_FILE}:${line}  caso publicado con campos [COMPLETAR]`);
+      problems.push(`${PROJECTS_FILE}:${line}  caso con ${flag}: true y campos [COMPLETAR]`);
     }
     if (/:\s*(''|"")\s*[,}]/.test(block.text)) {
-      problems.push(`${PROJECTS_FILE}:${line}  caso publicado con campo vacío`);
+      problems.push(`${PROJECTS_FILE}:${line}  caso con ${flag}: true y campo vacío`);
     }
   }
 }
@@ -89,4 +90,4 @@ if (problems.length > 0) {
   process.exit(1);
 }
 
-console.log('✓ Contenido sin placeholders, enlaces muertos ni casos incompletos publicados.');
+console.log('✓ Contenido sin placeholders, enlaces muertos ni casos incompletos visibles.');

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { isPublished, publishedProjects, PENDING, type Project } from '../src/data/projects';
+import { isPublished, isVisibleOnHome, publishedProjects, visibleProjects, PENDING, type Project } from '../src/data/projects';
+import { sectionNumbers } from '../src/i18n/utils';
 
 const complete = {
   title: 'Caso',
@@ -18,6 +19,7 @@ const build = (overrides: Partial<Project> = {}, contentOverrides: Partial<typeo
   stack: ['TypeScript'],
   links: {},
   published: true,
+  visibleOnHome: true,
   content: {
     es: { ...complete, ...contentOverrides },
     en: { ...complete, ...contentOverrides },
@@ -57,8 +59,37 @@ describe('isPublished', () => {
   });
 });
 
-describe('publishedProjects', () => {
-  it('hoy no devuelve ningún caso porque falta la decisión técnica y la precisión', () => {
+describe('isVisibleOnHome', () => {
+  it('muestra la tarjeta con contenido completo y visibleOnHome en true', () => {
+    expect(isVisibleOnHome(build())).toBe(true);
+  });
+
+  it('oculta la tarjeta si visibleOnHome está en false', () => {
+    expect(isVisibleOnHome(build({ visibleOnHome: false }))).toBe(false);
+  });
+
+  it('oculta la tarjeta si el contenido está incompleto aunque visibleOnHome sea true', () => {
+    expect(isVisibleOnHome(build({}, { decision: PENDING }))).toBe(false);
+  });
+
+  it('oculta la tarjeta si el caso no está publicado', () => {
+    expect(isVisibleOnHome(build({ published: false }))).toBe(false);
+  });
+});
+
+describe('estado actual de los datos', () => {
+  it('ningún caso se publica ni se muestra todavía', () => {
     expect(publishedProjects()).toEqual([]);
+    expect(visibleProjects()).toEqual([]);
+  });
+});
+
+describe('sectionNumbers', () => {
+  it('numera de 1 a 3 cuando hay proyectos visibles', () => {
+    expect(sectionNumbers(true)).toEqual({ projects: 1, about: 2, contact: 3 });
+  });
+
+  it('renumera sin proyectos: proyectos en 0 y contacto en 2', () => {
+    expect(sectionNumbers(false)).toEqual({ projects: 0, about: 1, contact: 2 });
   });
 });

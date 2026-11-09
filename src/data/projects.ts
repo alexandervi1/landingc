@@ -21,6 +21,8 @@ export interface Project {
   links: { demo?: string; repo?: string };
   /** Intención explícita de publicar. La página solo existe si además el contenido está completo. */
   published: boolean;
+  /** La tarjeta solo aparece en la home si además el contenido está completo. */
+  visibleOnHome: boolean;
   content: Record<Locale, ProjectContent>;
 }
 
@@ -31,6 +33,7 @@ export const projects: Project[] = [
     stack: ['PHP', 'Laravel', 'MongoDB'],
     links: {},
     published: false,
+    visibleOnHome: false,
     content: {
       es: {
         title: 'Módulo de cobro y reporte para servicio de parking',
@@ -65,6 +68,7 @@ export const projects: Project[] = [
     stack: ['PHP', 'MySQL'],
     links: {},
     published: false,
+    visibleOnHome: false,
     content: {
       es: {
         title: 'Tienda en línea y panel de administración para un comercio de mariscos',
@@ -97,6 +101,7 @@ export const projects: Project[] = [
     stack: ['C#', 'Unity', 'Blender'],
     links: {},
     published: false,
+    visibleOnHome: false,
     content: {
       es: {
         title: 'Juego interactivo para parques de energía hidroeléctrica',
@@ -140,6 +145,13 @@ export function isPublished(project: Project): boolean {
 }
 
 export const publishedProjects = (): Project[] => projects.filter(isPublished);
+
+/** Casos que se muestran en la home: requieren visibilidad explícita y contenido completo. */
+export function isVisibleOnHome(project: Project): boolean {
+  return project.visibleOnHome && isPublished(project);
+}
+
+export const visibleProjects = (): Project[] => projects.filter(isVisibleOnHome);
 
 export const projectPath = (project: Project, locale: Locale): string =>
   locale === 'es' ? `/proyectos/${project.id}` : `/en/projects/${project.id}`;
