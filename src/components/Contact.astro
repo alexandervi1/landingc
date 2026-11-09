@@ -1,11 +1,16 @@
 ---
-import type { Dict } from '../i18n/types';
+import type { Dict, Locale } from '../i18n/types';
+import { links } from '../data/site';
 
 interface Props {
   dict: Dict;
+  locale: Locale;
 }
 
-const { dict } = Astro.props;
+const { dict, locale } = Astro.props;
+const socials = dict.contact.socials.filter((social) => links[social.id] !== '');
+const form = dict.contact.form;
+const privacyHref = locale === 'es' ? '/privacidad' : '/en/privacy';
 ---
 
 <section id="contacto" class="section hairline">
@@ -15,12 +20,112 @@ const { dict } = Astro.props;
       <h2 class="display contact-title">{dict.contact.heading}</h2>
       <p class="contact-lead">{dict.contact.lead}</p>
       <a class="email display" href={`mailto:${dict.contact.emailCta}`}>{dict.contact.emailCta}</a>
-      <div class="socials">
-        {dict.contact.socials.map((s) => <a class="label" href={s.href}>{s.label}</a>)}
-      </div>
+      {
+        socials.length > 0 && (
+          <div class="socials">
+            {socials.map((s) => (
+              <a class="label" href={links[s.id]}>
+                {s.label}
+              </a>
+            ))}
+          </div>
+        )
+      }
+
+      <form
+        class="contact-form"
+        method="post"
+        action="/api/contact"
+        data-contact-form
+        data-str-sending={form.sending}
+        data-str-success={form.success}
+        data-str-error={form.error}
+      >
+        <div class="field">
+          <label class="label" for="cf-name">{form.name}</label>
+          <input id="cf-name" name="name" type="text" required minlength="2" maxlength="80" autocomplete="name" />
+        </div>
+
+        <div class="field">
+          <label class="label" for="cf-email">{form.email}</label>
+          <input id="cf-email" name="email" type="email" required maxlength="200" autocomplete="email" />
+        </div>
+
+        <div class="field">
+          <label class="label" for="cf-message">{form.message}</label>
+          <textarea id="cf-message" name="message" rows="5" required minlength="20" maxlength="2000"></textarea>
+        </div>
+
+        <div class="hp" aria-hidden="true">
+          <label for="cf-website">Website</label>
+          <input id="cf-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <button class="btn btn-primary" type="submit">{form.submit}</button>
+        <p class="form-consent">
+          {form.consent.lead} <a href={privacyHref}>{form.consent.link}</a>.
+        </p>
+        <p class="label form-status" data-contact-status aria-live="polite"></p>
+        <noscript><p class="form-noscript">{form.noscript}</p></noscript>
+      </form>
     </div>
   </div>
 </section>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
+
+  if (form) {
+    const status = form.querySelector<HTMLElement>('[data-contact-status]');
+    const button = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+    const started = Date.now();
+
+    const strings = {
+      sending: form.dataset.strSending ?? '',
+      success: form.dataset.strSuccess ?? '',
+      error: form.dataset.strError ?? '',
+    };
+
+    const setStatus = (text: string, state?: 'ok' | 'error') => {
+      if (!status) return;
+      status.textContent = text;
+      if (state) status.dataset.state = state;
+      else delete status.dataset.state;
+    };
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const data = new FormData(form);
+      const payload = {
+        name: String(data.get('name') ?? ''),
+        email: String(data.get('email') ?? ''),
+        message: String(data.get('message') ?? ''),
+        website: String(data.get('website') ?? ''),
+        elapsed: Date.now() - started,
+      };
+
+      if (button) button.disabled = true;
+      setStatus(strings.sending);
+
+      try {
+        const response = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        if (!response.ok) throw new Error(String(response.status));
+
+        form.reset();
+        setStatus(strings.success, 'ok');
+      } catch {
+        setStatus(strings.error, 'error');
+      } finally {
+        if (button) button.disabled = false;
+      }
+    });
+  }
+</script>
 
 <style>
   .contact-block {
@@ -65,5 +170,91 @@ const { dict } = Astro.props;
 
   .socials a:hover {
     color: var(--color-ink);
+  }
+
+  .contact-form {
+    display: grid;
+    gap: 20px;
+    margin-top: 48px;
+    max-width: 560px;
+  }
+
+  .field {
+    display: grid;
+    gap: 8px;
+  }
+
+  .field input,
+  .field textarea {
+    width: 100%;
+    padding: 12px 14px;
+    background: transparent;
+    border: 1px solid var(--color-line-strong);
+    border-radius: 0;
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  .field textarea {
+    min-height: 140px;
+    resize: vertical;
+  }
+
+  .field input:focus-visible,
+  .field textarea:focus-visible {
+    outline: 2px solid var(--color-yellow);
+    outline-offset: 1px;
+  }
+
+  .contact-form button {
+    justify-self: start;
+  }
+
+  .contact-form button:disabled {
+    opacity: 0.5;
+    cursor: progress;
+  }
+
+  .hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .form-status {
+    min-height: 16px;
+  }
+
+  .form-consent {
+    font-size: 13px;
+    color: var(--color-ink-muted);
+  }
+
+  .form-consent a {
+    color: var(--color-ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .form-consent a:hover {
+    color: var(--color-yellow);
+  }
+
+  .form-status[data-state='ok'] {
+    color: var(--color-yellow);
+  }
+
+  .form-status[data-state='error'] {
+    color: #ff9d9d;
+  }
+
+  .form-noscript {
+    margin-top: 8px;
+    font-size: 14px;
+    color: var(--color-ink-muted);
   }
 </style>

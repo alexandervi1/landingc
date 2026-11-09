@@ -1,0 +1,86 @@
+---
+import type { PrivacyDoc } from '../data/privacy';
+
+interface Props {
+  doc: PrivacyDoc;
+}
+
+const { doc } = Astro.props;
+---
+
+<section class="section">
+  <div class="wrap legal">
+    <p class="label">{doc.updated}</p>
+    <h1 class="display legal-title">{doc.title}</h1>
+    <p class="legal-intro">{doc.intro}</p>
+
+    {
+      doc.sections.map((section) => (
+        <section class="legal-block">
+          <h2 class="display legal-heading">{section.heading}</h2>
+          {section.paragraphs.map((paragraph) => (
+            <p>{paragraph}</p>
+          ))}
+          {section.list && (
+            <ul>
+              {section.list.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          )}
+        </section>
+      ))
+    }
+
+    <p class="legal-disclaimer">{doc.disclaimer}</p>
+  </div>
+</section>
+
+<style>
+  .legal {
+    max-width: 720px;
+  }
+
+  .legal-title {
+    margin-top: 16px;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+  }
+
+  .legal-intro {
+    margin-top: 24px;
+    color: var(--color-ink-muted);
+  }
+
+  .legal-block {
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .legal-heading {
+    font-size: clamp(1.25rem, 2.2vw, 1.6rem);
+  }
+
+  .legal-block p {
+    margin-top: 12px;
+    color: var(--color-ink-muted);
+  }
+
+  .legal-block ul {
+    margin: 12px 0 0;
+    padding-left: 20px;
+    color: var(--color-ink-muted);
+  }
+
+  .legal-block li {
+    margin-top: 6px;
+  }
+
+  .legal-disclaimer {
+    margin-top: 48px;
+    padding: 16px;
+    border: 1px solid var(--color-line-strong);
+    font-size: 14px;
+    color: var(--color-ink-muted);
+  }
+</style>

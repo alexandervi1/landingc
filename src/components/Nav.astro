@@ -14,16 +14,17 @@ const langLabel = locale === 'es' ? 'Idioma' : 'Language';
 
 <header class="nav" data-nav>
   <div class="wrap nav-inner">
-    <a class="brand" href={localePath(locale)} aria-label="Alexander Villalva">
+    <a class="brand" href={localePath(locale)}>
       <span class="display brand-mark">AV</span>
       <span class="label brand-name">Alexander Villalva</span>
     </a>
 
     <div class="nav-right">
-      <nav class="nav-links" aria-label={navLabel}>
+      <nav class="nav-links" id="nav-menu" aria-label={navLabel} data-nav-menu>
         <a class="label" href="#proyectos">{dict.nav.projects}</a>
         <a class="label" href="#sobre-mi">{dict.nav.about}</a>
         <a class="label" href="#contacto">{dict.nav.contact}</a>
+        <a class="btn btn-ghost nav-cta-mobile" href="#contacto">{dict.nav.cta}</a>
       </nav>
 
       <a class="btn btn-ghost nav-cta" href="#contacto">{dict.nav.cta}</a>
@@ -45,6 +46,17 @@ const langLabel = locale === 'es' ? 'Idioma' : 'Language';
           aria-current={locale === 'en' ? 'page' : undefined}>EN</a
         >
       </div>
+
+      <button
+        class="nav-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="nav-menu"
+        aria-label={dict.a11y.menu}
+        data-nav-toggle
+      >
+        <span class="nav-toggle-bars" aria-hidden="true"></span>
+      </button>
     </div>
   </div>
 </header>
@@ -61,8 +73,9 @@ const langLabel = locale === 'es' ? 'Idioma' : 'Language';
       border-color 0.2s ease;
   }
 
-  .nav.is-scrolled {
-    background: color-mix(in srgb, var(--color-canvas) 88%, transparent);
+  .nav.is-scrolled,
+  .nav.is-open {
+    background: color-mix(in srgb, var(--color-canvas) 94%, transparent);
     backdrop-filter: blur(12px);
     border-bottom-color: var(--color-line);
   }
@@ -89,8 +102,18 @@ const langLabel = locale === 'es' ? 'Idioma' : 'Language';
     line-height: 1;
   }
 
+  /* Visualmente oculto en móvil, visible desde 768px. Mantiene el nombre
+     en el árbol de accesibilidad para que coincida con el texto visible. */
   .brand-name {
-    display: none;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
 
   .nav-right {
@@ -101,7 +124,6 @@ const langLabel = locale === 'es' ? 'Idioma' : 'Language';
 
   .nav-links {
     display: none;
-    gap: 20px;
   }
 
   .nav-links a,
@@ -119,7 +141,8 @@ const langLabel = locale === 'es' ? 'Idioma' : 'Language';
     color: var(--color-ink);
   }
 
-  .nav-cta {
+  .nav-cta,
+  .nav-cta-mobile {
     display: none;
     height: 36px;
     padding-inline: 14px;
@@ -137,19 +160,119 @@ const langLabel = locale === 'es' ? 'Idioma' : 'Language';
     font-size: 11px;
   }
 
-  @media (min-width: 640px) {
-    .nav-cta {
+  .nav-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 1px solid var(--color-line-strong);
+    background: transparent;
+    color: var(--color-ink);
+    cursor: pointer;
+  }
+
+  .nav-toggle:hover {
+    border-color: var(--color-ink);
+  }
+
+  .nav-toggle-bars {
+    position: relative;
+    display: block;
+    width: 16px;
+    height: 1px;
+    background: currentColor;
+    transition: background-color 0.18s ease;
+  }
+
+  .nav-toggle-bars::before,
+  .nav-toggle-bars::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 16px;
+    height: 1px;
+    background: currentColor;
+    transition: transform 0.18s ease;
+  }
+
+  .nav-toggle-bars::before {
+    top: -5px;
+  }
+
+  .nav-toggle-bars::after {
+    top: 5px;
+  }
+
+  .nav.is-open .nav-toggle-bars {
+    background: transparent;
+  }
+
+  .nav.is-open .nav-toggle-bars::before {
+    transform: translateY(5px) rotate(45deg);
+  }
+
+  .nav.is-open .nav-toggle-bars::after {
+    transform: translateY(-5px) rotate(-45deg);
+  }
+
+  @media (max-width: 767px) {
+    .nav-links {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      padding: 4px clamp(20px, 4vw, 40px) 20px;
+      background: var(--color-canvas);
+      border-bottom: 1px solid var(--color-line);
+    }
+
+    .nav.is-open .nav-links {
+      display: flex;
+    }
+
+    .nav-links > a:not(.btn) {
+      padding-block: 14px;
+      border-top: 1px solid var(--color-line);
+      font-size: 12px;
+    }
+
+    .nav-cta-mobile {
       display: inline-flex;
+      align-self: flex-start;
+      margin-top: 16px;
     }
   }
 
   @media (min-width: 768px) {
     .brand-name {
-      display: inline;
+      position: static;
+      width: auto;
+      height: auto;
+      margin: 0;
+      overflow: visible;
+      clip: auto;
     }
 
     .nav-links {
       display: flex;
+      gap: 16px;
+    }
+
+    .nav-cta {
+      display: inline-flex;
+    }
+
+    .nav-toggle {
+      display: none;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .nav-links {
+      gap: 24px;
     }
   }
 </style>

@@ -6,16 +6,43 @@ interface Props {
 }
 
 const { dict } = Astro.props;
-const [first, second] = dict.about.paragraphs;
 ---
 
 <section id="sobre-mi" class="section about">
   <div class="wrap about-grid">
+    <figure class="about-photo">
+      <picture>
+        <source srcset="/foto-560.webp" type="image/webp" />
+        <img
+          src="/foto.jpg"
+          alt={dict.about.photoAlt}
+          width="1080"
+          height="1055"
+          loading="lazy"
+          decoding="async"
+        />
+      </picture>
+    </figure>
+
     <div class="about-copy">
       <p class="label">{dict.about.label}</p>
       <h2 class="display about-title">{dict.about.heading}</h2>
-      <p class="lead">{first}</p>
-      <p class="sub">{second}</p>
+      {
+        dict.about.paragraphs.map((paragraph, index) => (
+          <p class={index === 0 ? 'lead' : 'sub'}>{paragraph}</p>
+        ))
+      }
+
+      <dl class="facts">
+        {
+          dict.about.facts.map((fact) => (
+            <div class="fact">
+              <dt class="label">{fact.label}</dt>
+              <dd>{fact.value}</dd>
+            </div>
+          ))
+        }
+      </dl>
     </div>
 
     <dl class="stack">
@@ -48,9 +75,50 @@ const [first, second] = dict.about.paragraphs;
     gap: 48px;
   }
 
+  .about-photo {
+    margin: 0;
+    max-width: 260px;
+  }
+
+  .about-photo picture {
+    display: block;
+  }
+
+  .about-photo img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    object-position: 55% 30%;
+    height: auto;
+    border: 1px solid var(--color-line-strong);
+  }
+
   .about-title {
     margin-top: 16px;
     font-size: clamp(2rem, 5vw, 4rem);
+  }
+
+  .facts {
+    margin: 32px 0 0;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .fact {
+    display: grid;
+    grid-template-columns: 128px 1fr;
+    gap: 16px;
+    padding-block: 10px;
+    border-bottom: 1px solid var(--color-line);
+    font-size: 14px;
+  }
+
+  .fact dt {
+    padding-top: 2px;
+  }
+
+  .fact dd {
+    margin: 0;
   }
 
   .lead {
@@ -97,14 +165,27 @@ const [first, second] = dict.about.paragraphs;
     .about-grid {
       grid-template-columns: repeat(12, 1fr);
       gap: 64px;
+      align-items: start;
+    }
+
+    .about-photo {
+      grid-column: span 3;
+      max-width: none;
     }
 
     .about-copy {
-      grid-column: span 7;
+      grid-column: span 9;
+    }
+
+    .facts {
+      max-width: 560px;
     }
 
     .stack {
-      grid-column: span 5;
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 0 32px;
     }
   }
 </style>

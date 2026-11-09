@@ -1,8 +1,10 @@
 ---
+import type { Dict, ProjectId } from '../i18n/types';
+
 interface Props {
   index: number;
-  project: { id: string; year: string; stack: string[]; href: string };
-  item: { title: string; summary: string };
+  project: { id: ProjectId; year: string; stack: string[]; href: string };
+  item: Dict['projects']['items'][ProjectId];
   linkLabel: string;
 }
 
@@ -12,14 +14,33 @@ const { index, project, item, linkLabel } = Astro.props;
 <article class="card" data-reveal style={`--i:${index}`}>
   <div class="card-top">
     <span class="label">{String(index + 1).padStart(2, '0')}</span>
-    <span class="label">{project.year}</span>
+    <span class="label">{project.year || '—'}</span>
   </div>
   <h3 class="display card-title">{item.title}</h3>
   <p class="card-summary">{item.summary}</p>
+
+  {
+    item.details && (
+      <dl class="card-details">
+        {item.details.map((detail) => (
+          <div class="card-detail">
+            <dt class="label">{detail.label}</dt>
+            <dd>{detail.value}</dd>
+          </div>
+        ))}
+      </dl>
+    )
+  }
+
   <ul class="card-stack">
     {project.stack.map((s) => <li class="chip">{s}</li>)}
   </ul>
-  <a class="card-link" href={project.href}>{linkLabel} <span aria-hidden="true">→</span></a>
+
+  {item.note && <p class="card-note">{item.note}</p>}
+
+  <a class="card-link" href={project.href} hidden={project.href === ''}>
+    {linkLabel} <span aria-hidden="true">→</span>
+  </a>
 </article>
 
 <style>
@@ -28,7 +49,7 @@ const { index, project, item, linkLabel } = Astro.props;
     flex-direction: column;
     gap: 16px;
     padding: 24px;
-    border: 1px solid var(--color-line);
+    border: 1px solid var(--color-line-strong);
     background: var(--color-canvas-2);
     transition:
       border-color 0.2s ease,
@@ -53,6 +74,31 @@ const { index, project, item, linkLabel } = Astro.props;
   .card-summary {
     color: var(--color-ink-muted);
     font-size: 15px;
+  }
+
+  .card-details {
+    display: grid;
+    gap: 14px;
+    margin: 0;
+  }
+
+  .card-detail dt {
+    margin-bottom: 4px;
+  }
+
+  .card-detail dd {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--color-ink-muted);
+  }
+
+  .card-note {
+    padding-top: 12px;
+    border-top: 1px solid var(--color-line);
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--color-ink-muted);
   }
 
   .card-stack {

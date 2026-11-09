@@ -1,17 +1,20 @@
 ---
-import type { Dict } from '../i18n/types';
+import type { Dict, Locale } from '../i18n/types';
 
 interface Props {
   dict: Dict;
+  locale: Locale;
 }
 
-const { dict } = Astro.props;
+const { dict, locale } = Astro.props;
+const privacyHref = locale === 'es' ? '/privacidad' : '/en/privacy';
 ---
 
 <footer class="hairline">
   <div class="wrap footer-inner">
     <span class="label">{dict.footer.rights}</span>
     <span class="label">{dict.footer.location}</span>
+    <a class="label footer-link" href={privacyHref}>{dict.footer.privacy}</a>
     <span class="label">{dict.footer.built}</span>
   </div>
 </footer>
@@ -23,5 +26,14 @@ const { dict } = Astro.props;
     justify-content: space-between;
     gap: 12px;
     padding-block: 28px;
+  }
+
+  .footer-link {
+    text-decoration: none;
+    color: var(--color-ink-muted);
+  }
+
+  .footer-link:hover {
+    color: var(--color-ink);
   }
 </style>
