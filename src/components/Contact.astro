@@ -41,6 +41,9 @@ const privacyHref = locale === 'es' ? '/privacidad' : '/en/privacy';
         data-str-sending={form.sending}
         data-str-success={form.success}
         data-str-error={form.error}
+        data-str-error-validation={form.errorValidation}
+        data-str-error-rate={form.errorRate}
+        data-str-error-network={form.errorNetwork}
       >
         <div class="field">
           <label class="label" for="cf-name">{form.name}</label>
@@ -74,7 +77,7 @@ const privacyHref = locale === 'es' ? '/privacidad' : '/en/privacy';
           {form.altLead}
           <a href={`mailto:${dict.contact.emailCta}`}>{dict.contact.emailCta}</a>.
         </p>
-        <p class="label form-status" data-contact-status aria-live="polite"></p>
+        <p class="form-status" data-contact-status aria-live="polite" aria-atomic="true"></p>
         <noscript><p class="form-noscript">{form.noscript}</p></noscript>
       </form>
     </div>
@@ -93,6 +96,9 @@ const privacyHref = locale === 'es' ? '/privacidad' : '/en/privacy';
       sending: form.dataset.strSending ?? '',
       success: form.dataset.strSuccess ?? '',
       error: form.dataset.strError ?? '',
+      errorValidation: form.dataset.strErrorValidation ?? '',
+      errorRate: form.dataset.strErrorRate ?? '',
+      errorNetwork: form.dataset.strErrorNetwork ?? '',
     };
 
     const setStatus = (text: string, state?: 'ok' | 'error') => {
@@ -124,12 +130,18 @@ const privacyHref = locale === 'es' ? '/privacidad' : '/en/privacy';
           headers: { 'content-type': 'application/json' },
           body: JSON.stringify(payload),
         });
-        if (!response.ok) throw new Error(String(response.status));
-
-        form.reset();
-        setStatus(strings.success, 'ok');
+        if (response.ok) {
+          form.reset();
+          setStatus(strings.success, 'ok');
+        } else if (response.status === 422) {
+          setStatus(strings.errorValidation, 'error');
+        } else if (response.status === 429) {
+          setStatus(strings.errorRate, 'error');
+        } else {
+          setStatus(strings.error, 'error');
+        }
       } catch {
-        setStatus(strings.error, 'error');
+        setStatus(strings.errorNetwork, 'error');
       } finally {
         if (button) button.disabled = false;
       }
@@ -236,7 +248,10 @@ const privacyHref = locale === 'es' ? '/privacidad' : '/en/privacy';
   }
 
   .form-status {
-    min-height: 16px;
+    min-height: 20px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--color-ink-muted);
   }
 
   .field-consent {

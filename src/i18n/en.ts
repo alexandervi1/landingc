@@ -53,8 +53,7 @@ export const en: Dict = {
     ],
     paragraphs: [
       'Software engineer. I cover the full lifecycle — problem definition, data model, API, interface and deployment — and deliver systems someone else can operate and maintain.',
-      'I work with explicit decisions and agreed scope. I prefer the simplest solution that solves the problem and holds up in production over an abstraction we do not need yet.',
-      'Every delivery is documented: configuration, setup and verification criteria. I raise technical risks early, not once they have already become debt.',
+      'I work with explicit decisions and agreed scope.',
     ],
     stack: { daily: 'Daily use', known: 'Familiar with' },
     cta: { email: 'Email me', github: 'GitHub', linkedin: 'LinkedIn' },
@@ -94,6 +93,12 @@ export const en: Dict = {
       sending: 'Sending…',
       success: 'Message sent. I reply within 24 hours.',
       error: 'Could not send. Email me at hola@alexandervillalva.uk.',
+      errorValidation:
+        'Check the fields and the privacy box. Nothing you wrote has been cleared.',
+      errorRate:
+        'You have sent several messages in a row. Wait a minute and try again; your text is still here.',
+      errorNetwork:
+        'Could not reach the server. Check your connection and try again; your text is still here.',
       noscript: 'The form needs JavaScript. Email me at hola@alexandervillalva.uk.',
       consent: {
         lead: 'I accept the',

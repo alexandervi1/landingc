@@ -53,8 +53,7 @@ export const es: Dict = {
     ],
     paragraphs: [
       'Ingeniero de software. Cubro el ciclo completo —definición del problema, modelo de datos, API, interfaz y despliegue— y entrego sistemas que otra persona puede operar y mantener.',
-      'Trabajo con decisiones explícitas y alcance acordado. Prefiero la solución más simple que resuelve el problema y resiste producción antes que una abstracción que todavía no se necesita.',
-      'Dejo cada entrega documentada: configuración, puesta en marcha y criterios de verificación. Los riesgos técnicos los comunico temprano, no cuando ya se han convertido en deuda.',
+      'Trabajo con decisiones explícitas y alcance acordado.',
     ],
     stack: { daily: 'Uso a diario', known: 'Conozco' },
     cta: { email: 'Escríbeme', github: 'GitHub', linkedin: 'LinkedIn' },
@@ -94,6 +93,12 @@ export const es: Dict = {
       sending: 'Enviando…',
       success: 'Mensaje enviado. Te respondo en menos de 24 horas.',
       error: 'No se pudo enviar. Escríbeme a hola@alexandervillalva.uk.',
+      errorValidation:
+        'Revisa los campos y la casilla de privacidad. No se ha borrado nada de lo que escribiste.',
+      errorRate:
+        'Has enviado varios mensajes seguidos. Espera un minuto y vuelve a intentarlo; lo escrito sigue aquí.',
+      errorNetwork:
+        'No se pudo conectar con el servidor. Comprueba tu conexión y vuelve a intentarlo; lo escrito sigue aquí.',
       noscript: 'El formulario necesita JavaScript activo. Escríbeme a hola@alexandervillalva.uk.',
       consent: {
         lead: 'Acepto el',

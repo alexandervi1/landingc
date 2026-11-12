@@ -38,4 +38,21 @@ describe('marcado del formulario de contacto', () => {
       expect(input![0]).not.toContain('checked');
     }
   });
+
+  it('expone un mensaje distinto para validación, límite y red', async () => {
+    const html = await render(es, 'es');
+    const form = /<form[^>]*>/.exec(html)?.[0] ?? '';
+
+    expect(form).toContain('data-str-error-validation');
+    expect(form).toContain('data-str-error-rate');
+    expect(form).toContain('data-str-error-network');
+  });
+
+  it('anuncia el estado completo a lectores de pantalla', async () => {
+    const html = await render(es, 'es');
+    const status = /<p class="form-status"[^>]*>/.exec(html)?.[0] ?? '';
+
+    expect(status).toContain('aria-live="polite"');
+    expect(status).toContain('aria-atomic="true"');
+  });
 });

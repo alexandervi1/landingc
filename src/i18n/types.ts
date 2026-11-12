@@ -60,6 +60,9 @@ export interface Dict {
       sending: string;
       success: string;
       error: string;
+      errorValidation: string;
+      errorRate: string;
+      errorNetwork: string;
       noscript: string;
       consent: { lead: string; link: string; tail: string };
       altLead: string;
