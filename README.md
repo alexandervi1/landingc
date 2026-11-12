@@ -49,7 +49,9 @@ npx wrangler dev --port 8787
 `scripts/check-content.mjs` recorre `src/i18n` y `src/data` y falla el build si encuentra:
 
 - la palabra `Placeholder` (texto provisional que no debe llegar a producción);
-- un enlace muerto con la forma `href: '#'`.
+- un enlace muerto con la forma `href: '#'`;
+- un caso con `published: true` o `visibleOnHome: true` que contenga `[COMPLETAR]` o campos vacíos;
+- cualquier `[COMPLETAR]` o `[CONFIRMAR]` en `src/data/privacy.ts`.
 
 Se ejecuta como `prebuild`, así que `npm run build` y `npm run deploy` lo corren siempre. Para ejecutarlo suelto:
 
@@ -62,6 +64,14 @@ También acepta rutas como argumento, útil para probar una regla:
 ```bash
 node scripts/check-content.mjs ruta/a/fixture
 ```
+
+## Aviso de privacidad
+
+`src/data/privacy.ts` contiene el aviso en ES y EN. La página muestra solo la línea de versión y fecha; el descargo legal vive como comentario al inicio del archivo y no se publica.
+
+> Este texto es una base redactada en lenguaje claro y no sustituye el asesoramiento de un abogado. Antes de considerarlo definitivo debe revisarlo un profesional en protección de datos.
+
+Los tres proveedores que aparecen en el aviso son Cloudflare, Resend y Google (buzón de destino). Si cambia el buzón, actualiza las dos listas de "Quién más interviene" / "Who else is involved".
 
 ## CI y despliegue
 

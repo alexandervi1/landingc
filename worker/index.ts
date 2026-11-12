@@ -73,6 +73,12 @@ export async function handleContact(request: Request, env: Env, ctx: Ctx): Promi
     return isFormPost ? done() : json({ error: 'invalid_fields' }, 422);
   }
 
+  // Consentimiento explícito: la casilla debe llegar marcada.
+  const consent = readField(body, 'consent');
+  if (consent !== '1' && consent !== 'true' && consent !== 'on') {
+    return isFormPost ? done() : json({ error: 'consent_required' }, 422);
+  }
+
   const ip = request.headers.get('cf-connecting-ip') ?? 'unknown';
   const rateKey = new Request(`https://contact-rate.internal/${encodeURIComponent(ip)}`);
   if (cache && (await cache.match(rateKey))) {

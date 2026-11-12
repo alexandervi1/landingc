@@ -2,16 +2,16 @@ import type { Dict } from './types';
 
 export const es: Dict = {
   meta: {
-    title: 'Alexander Villalva — Ingeniero de Software',
+    title: 'Alexander Villalva — Ingeniero de software full stack · Ecuador',
     description:
-      'Ingeniero de software. Desarrollo aplicaciones y sistemas con rigurosidad técnica y buenas prácticas de ingeniería de software.',
+      'Ingeniero de software full stack en Ecuador. Construyo aplicaciones web completas: modelo de datos, API, interfaz y despliegue.',
   },
   a11y: { skip: 'Saltar al contenido', menu: 'Menú' },
-  nav: { projects: 'Proyectos', about: 'Sobre mí', contact: 'Contacto', cta: 'Hablemos' },
+  nav: { projects: 'Proyectos', about: 'Sobre mí', cta: 'Hablemos' },
   hero: {
     eyebrow: 'Ingeniería de software',
     title: ['Software', 'que aguanta', 'producción.'],
-    lead: 'Soy Alexander Villalva. Desarrollo aplicaciones y sistemas con rigurosidad técnica y buenas prácticas de ingeniería de software.',
+    lead: 'Soy Alexander Villalva. Desarrollo aplicaciones web completas: modelo de datos, API, interfaz y despliegue.',
     ctaPrimary: 'Ver proyectos',
     ctaSecondary: 'Contacto',
     terminal: {
@@ -41,7 +41,7 @@ export const es: Dict = {
   },
   about: {
     label: 'Sobre mí',
-    heading: 'Cómo trabajo',
+    heading: 'Sobre mí',
     photoAlt:
       'Alexander Villalva de perfil, con abrigo y gafas de sol, frente a una ciudad al atardecer.',
     facts: [
@@ -56,16 +56,29 @@ export const es: Dict = {
       'Trabajo con decisiones explícitas y alcance acordado. Prefiero la solución más simple que resuelve el problema y resiste producción antes que una abstracción que todavía no se necesita.',
       'Dejo cada entrega documentada: configuración, puesta en marcha y criterios de verificación. Los riesgos técnicos los comunico temprano, no cuando ya se han convertido en deuda.',
     ],
-    groups: [
-      { label: 'Lenguajes', items: ['JavaScript / TypeScript', 'PHP', 'C#', 'Python', 'SQL'] },
-      { label: 'Backend', items: ['Node.js', 'Laravel', 'Express', 'REST', 'Prisma'] },
+    stack: { daily: 'Uso a diario', known: 'Conozco' },
+    cta: { email: 'Escríbeme', github: 'GitHub', linkedin: 'LinkedIn' },
+  },
+  method: {
+    label: 'Cómo trabajo',
+    heading: 'Cómo trabajo',
+    steps: [
       {
-        label: 'Bases de datos',
-        items: ['PostgreSQL', 'MySQL', 'MariaDB', 'SQL Server', 'SQLite', 'MongoDB', 'Redis'],
+        title: 'Defino el alcance',
+        body: 'Acordamos qué se construye y qué no, y las decisiones quedan por escrito.',
       },
-      { label: 'Frontend', items: ['Astro', 'React', 'Next.js', 'Tailwind CSS', 'HTML/CSS'] },
-      { label: '3D / Interactivo', items: ['Unity', 'Blender'] },
-      { label: 'Infraestructura', items: ['Docker', 'Git', 'Linux', 'CI/CD'] },
+      {
+        title: 'Construyo lo simple',
+        body: 'Elijo la solución más simple que resuelve el problema y resiste producción, sin abstracciones que aún no hacen falta.',
+      },
+      {
+        title: 'Entrego documentado',
+        body: 'Cada entrega incluye configuración, puesta en marcha y criterios de verificación para que otra persona pueda operarla.',
+      },
+      {
+        title: 'Aviso de riesgos a tiempo',
+        body: 'Comunico los riesgos técnicos desde el principio, antes de que se conviertan en deuda.',
+      },
     ],
   },
   contact: {
@@ -82,7 +95,12 @@ export const es: Dict = {
       success: 'Mensaje enviado. Te respondo en menos de 24 horas.',
       error: 'No se pudo enviar. Escríbeme a hola@alexandervillalva.uk.',
       noscript: 'El formulario necesita JavaScript activo. Escríbeme a hola@alexandervillalva.uk.',
-      consent: { lead: 'Al enviar, aceptas el', link: 'aviso de privacidad' },
+      consent: {
+        lead: 'Acepto el',
+        link: 'aviso de privacidad',
+        tail: 'y el tratamiento de mis datos para responder a este mensaje.',
+      },
+      altLead: 'Si prefieres no usar el formulario, escríbeme a',
     },
     socials: [
       { id: 'github', label: 'GitHub' },

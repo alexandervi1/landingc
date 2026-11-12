@@ -2,16 +2,16 @@ import type { Dict } from './types';
 
 export const en: Dict = {
   meta: {
-    title: 'Alexander Villalva — Software Engineer',
+    title: 'Alexander Villalva — Full Stack Software Engineer · Ecuador',
     description:
-      'Software engineer. I build applications and systems with technical rigour and solid software engineering practices.',
+      'Full stack software engineer based in Ecuador. I build complete web applications: data model, API, interface and deployment.',
   },
   a11y: { skip: 'Skip to content', menu: 'Menu' },
-  nav: { projects: 'Projects', about: 'About', contact: 'Contact', cta: "Let's talk" },
+  nav: { projects: 'Projects', about: 'About', cta: "Let's talk" },
   hero: {
     eyebrow: 'Software engineering',
     title: ['Software', 'that holds up', 'in production.'],
-    lead: 'I am Alexander Villalva. I build applications and systems with technical rigour and solid software engineering practices.',
+    lead: 'I am Alexander Villalva. I build complete web applications: data model, API, interface and deployment.',
     ctaPrimary: 'See projects',
     ctaSecondary: 'Contact',
     terminal: {
@@ -41,7 +41,7 @@ export const en: Dict = {
   },
   about: {
     label: 'About',
-    heading: 'How I work',
+    heading: 'About',
     photoAlt:
       'Alexander Villalva in profile, wearing a coat and sunglasses, against a city skyline at sunset.',
     facts: [
@@ -56,16 +56,29 @@ export const en: Dict = {
       'I work with explicit decisions and agreed scope. I prefer the simplest solution that solves the problem and holds up in production over an abstraction we do not need yet.',
       'Every delivery is documented: configuration, setup and verification criteria. I raise technical risks early, not once they have already become debt.',
     ],
-    groups: [
-      { label: 'Languages', items: ['JavaScript / TypeScript', 'PHP', 'C#', 'Python', 'SQL'] },
-      { label: 'Backend', items: ['Node.js', 'Laravel', 'Express', 'REST', 'Prisma'] },
+    stack: { daily: 'Daily use', known: 'Familiar with' },
+    cta: { email: 'Email me', github: 'GitHub', linkedin: 'LinkedIn' },
+  },
+  method: {
+    label: 'How I work',
+    heading: 'How I work',
+    steps: [
       {
-        label: 'Databases',
-        items: ['PostgreSQL', 'MySQL', 'MariaDB', 'SQL Server', 'SQLite', 'MongoDB', 'Redis'],
+        title: 'Define the scope',
+        body: "We agree on what gets built and what doesn't, and decisions are written down.",
       },
-      { label: 'Frontend', items: ['Astro', 'React', 'Next.js', 'Tailwind CSS', 'HTML/CSS'] },
-      { label: '3D / Interactive', items: ['Unity', 'Blender'] },
-      { label: 'Infrastructure', items: ['Docker', 'Git', 'Linux', 'CI/CD'] },
+      {
+        title: 'Build the simple thing',
+        body: "I pick the simplest solution that solves the problem and holds up in production, with no abstractions that aren't needed yet.",
+      },
+      {
+        title: 'Deliver documented',
+        body: 'Every delivery includes setup, start-up and verification criteria so someone else can run it.',
+      },
+      {
+        title: 'Flag risks early',
+        body: 'I raise technical risks from the start, before they turn into debt.',
+      },
     ],
   },
   contact: {
@@ -82,7 +95,12 @@ export const en: Dict = {
       success: 'Message sent. I reply within 24 hours.',
       error: 'Could not send. Email me at hola@alexandervillalva.uk.',
       noscript: 'The form needs JavaScript. Email me at hola@alexandervillalva.uk.',
-      consent: { lead: 'By sending, you accept the', link: 'privacy notice' },
+      consent: {
+        lead: 'I accept the',
+        link: 'privacy notice',
+        tail: 'and the processing of my data to answer this message.',
+      },
+      altLead: 'If you would rather not use the form, email me at',
     },
     socials: [
       { id: 'github', label: 'GitHub' },

@@ -6,7 +6,7 @@ export type SocialId = 'github' | 'linkedin';
 export interface Dict {
   meta: { title: string; description: string };
   a11y: { skip: string; menu: string };
-  nav: { projects: string; about: string; contact: string; cta: string };
+  nav: { projects: string; about: string; cta: string };
   hero: {
     eyebrow: string;
     title: [string, string, string];
@@ -37,7 +37,13 @@ export interface Dict {
     photoAlt: string;
     facts: { label: string; value: string }[];
     paragraphs: string[];
-    groups: { label: string; items: string[] }[];
+    stack: { daily: string; known: string };
+    cta: { email: string; github: string; linkedin: string };
+  };
+  method: {
+    label: string;
+    heading: string;
+    steps: { title: string; body: string }[];
   };
   // Notas: cuando existan artículos propios, añadir aquí un bloque `notes`
   // y una sección <Notes /> entre Projects y Contact en ambas páginas.
@@ -55,7 +61,8 @@ export interface Dict {
       success: string;
       error: string;
       noscript: string;
-      consent: { lead: string; link: string };
+      consent: { lead: string; link: string; tail: string };
+      altLead: string;
     };
     socials: { id: SocialId; label: string }[];
   };

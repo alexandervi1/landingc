@@ -83,6 +83,37 @@ if (projectsSource) {
   }
 }
 
+// Los textos traducibles y el inventario del stack no pueden llevar marcadores.
+for (const file of await collect('src/i18n')) {
+  const lines = (await readFile(file, 'utf8')).split(/\r?\n/);
+  lines.forEach((line, index) => {
+    if (/\[COMPLETAR\]/.test(line)) {
+      problems.push(`${file}:${index + 1}  texto traducible con marcador pendiente`);
+    }
+  });
+}
+
+const SITE_FILE = 'src/data/site.ts';
+const siteSource = await readFile(SITE_FILE, 'utf8').catch(() => null);
+if (siteSource) {
+  siteSource.split(/\r?\n/).forEach((line, index) => {
+    if (/\[COMPLETAR\]/.test(line)) {
+      problems.push(`${SITE_FILE}:${index + 1}  stack con asignación pendiente`);
+    }
+  });
+}
+
+// El aviso de privacidad no puede publicarse con marcadores sin resolver.
+const PRIVACY_FILE = 'src/data/privacy.ts';
+const privacySource = await readFile(PRIVACY_FILE, 'utf8').catch(() => null);
+if (privacySource) {
+  privacySource.split(/\r?\n/).forEach((line, index) => {
+    if (/\[COMPLETAR\]|\[CONFIRMAR\]/.test(line)) {
+      problems.push(`${PRIVACY_FILE}:${index + 1}  aviso de privacidad con marcador pendiente`);
+    }
+  });
+}
+
 if (problems.length > 0) {
   console.error('\n✗ Contenido no publicable:\n');
   for (const problem of problems) console.error(`  ${problem}`);
@@ -90,4 +121,4 @@ if (problems.length > 0) {
   process.exit(1);
 }
 
-console.log('✓ Contenido sin placeholders, enlaces muertos ni casos incompletos visibles.');
+console.log('✓ Contenido sin placeholders, enlaces muertos, casos incompletos visibles ni aviso pendiente.');

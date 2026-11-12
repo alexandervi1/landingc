@@ -1,5 +1,6 @@
 ---
 import type { Dict } from '../i18n/types';
+import { links, stack } from '../data/site';
 
 interface Props {
   dict: Dict;
@@ -7,6 +8,8 @@ interface Props {
 }
 
 const { dict, number } = Astro.props;
+const daily = stack.filter((item) => item.tier === 'daily').map((item) => item.name);
+const known = stack.filter((item) => item.tier === 'known').map((item) => item.name);
 ---
 
 <section id="sobre-mi" class="section about">
@@ -44,24 +47,44 @@ const { dict, number } = Astro.props;
           ))
         }
       </dl>
+
+      <div class="about-cta">
+        <a class="btn btn-primary" href="#contacto">{dict.about.cta.email}</a>
+        {links.github && <a class="btn btn-ghost" href={links.github}>{dict.about.cta.github}</a>}
+        {links.linkedin && (
+          <a class="btn btn-ghost" href={links.linkedin}>{dict.about.cta.linkedin}</a>
+        )}
+      </div>
     </div>
 
-    <dl class="stack">
-      {
-        dict.about.groups.map((group) => (
-          <div class="group">
-            <dt class="label group-label">{group.label}</dt>
-            <dd class="group-items">
-              <ul>
-                {group.items.map((item) => (
-                  <li>{item}</li>
-                ))}
-              </ul>
-            </dd>
-          </div>
-        ))
-      }
-    </dl>
+    <div class="stack">
+      <div class="group">
+        <p class="label group-label">
+          <span class="group-dot group-dot-accent" aria-hidden="true"></span>
+          {dict.about.stack.daily}
+        </p>
+        <ul class="chips chips-daily">
+          {
+            daily.map((name) => (
+              <li class="chip chip-daily">{name}</li>
+            ))
+          }
+        </ul>
+      </div>
+      <div class="group">
+        <p class="label group-label">
+          <span class="group-dot" aria-hidden="true"></span>
+          {dict.about.stack.known}
+        </p>
+        <ul class="chips chips-known">
+          {
+            known.map((name) => (
+              <li class="chip chip-known">{name}</li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -122,6 +145,13 @@ const { dict, number } = Astro.props;
     margin: 0;
   }
 
+  .about-cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 32px;
+  }
+
   .lead {
     margin-top: 24px;
     max-width: 60ch;
@@ -142,24 +172,49 @@ const { dict, number } = Astro.props;
     padding-block: 12px;
   }
 
-  .group-items {
-    margin: 0;
-  }
-
-  .group-items ul {
-    list-style: none;
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
     margin: 0;
     padding: 0;
+    list-style: none;
   }
 
-  .group-items li {
-    border-top: 1px solid var(--color-line);
-    padding-block: 10px;
-    font-size: 15px;
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 7px 12px;
+    border: 1px solid var(--color-line-strong);
+    font-size: 14px;
+    line-height: 1.2;
+    white-space: nowrap;
+    color: var(--color-ink);
   }
 
-  .group:first-child .group-items li:first-child {
-    border-top: 0;
+  .chip-daily {
+    border-left: 3px solid var(--color-yellow);
+    padding-left: 10px;
+  }
+
+  .chip-known {
+    padding: 5px 10px;
+    border-color: var(--color-line);
+    font-size: 13px;
+    color: var(--color-ink-muted);
+  }
+
+  .group-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    margin-right: 8px;
+    vertical-align: middle;
+    background: var(--color-line-strong);
+  }
+
+  .group-dot-accent {
+    background: var(--color-yellow);
   }
 
   @media (min-width: 1024px) {
@@ -185,7 +240,7 @@ const { dict, number } = Astro.props;
     .stack {
       grid-column: 1 / -1;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       gap: 0 32px;
     }
   }

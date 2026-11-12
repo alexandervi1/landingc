@@ -62,9 +62,17 @@ const privacyHref = locale === 'es' ? '/privacidad' : '/en/privacy';
           <input id="cf-website" name="website" type="text" tabindex="-1" autocomplete="off" />
         </div>
 
+        <div class="field field-consent">
+          <input id="cf-consent" name="consent" type="checkbox" value="1" required />
+          <label class="consent-label" for="cf-consent">
+            {form.consent.lead} <a href={privacyHref}>{form.consent.link}</a> {form.consent.tail}
+          </label>
+        </div>
+
         <button class="btn btn-primary" type="submit">{form.submit}</button>
-        <p class="form-consent">
-          {form.consent.lead} <a href={privacyHref}>{form.consent.link}</a>.
+        <p class="form-alt">
+          {form.altLead}
+          <a href={`mailto:${dict.contact.emailCta}`}>{dict.contact.emailCta}</a>.
         </p>
         <p class="label form-status" data-contact-status aria-live="polite"></p>
         <noscript><p class="form-noscript">{form.noscript}</p></noscript>
@@ -103,6 +111,7 @@ const privacyHref = locale === 'es' ? '/privacidad' : '/en/privacy';
         email: String(data.get('email') ?? ''),
         message: String(data.get('message') ?? ''),
         website: String(data.get('website') ?? ''),
+        consent: data.get('consent') ? '1' : '',
         elapsed: Date.now() - started,
       };
 
@@ -230,18 +239,55 @@ const privacyHref = locale === 'es' ? '/privacidad' : '/en/privacy';
     min-height: 16px;
   }
 
-  .form-consent {
-    font-size: 13px;
-    color: var(--color-ink-muted);
+  .field-consent {
+    grid-template-columns: auto 1fr;
+    align-items: start;
+    gap: 10px;
   }
 
-  .form-consent a {
+  .field-consent input {
+    width: 18px;
+    height: 18px;
+    margin: 2px 0 0;
+    accent-color: var(--color-yellow);
+    cursor: pointer;
+  }
+
+  .field-consent input:focus-visible {
+    outline: 2px solid var(--color-yellow);
+    outline-offset: 2px;
+  }
+
+  .consent-label {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--color-ink-muted);
+    cursor: pointer;
+  }
+
+  .consent-label a {
     color: var(--color-ink);
     text-decoration: underline;
     text-underline-offset: 3px;
   }
 
-  .form-consent a:hover {
+  .consent-label a:hover {
+    color: var(--color-yellow);
+  }
+
+  .form-alt {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--color-ink-muted);
+  }
+
+  .form-alt a {
+    color: var(--color-ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .form-alt a:hover {
     color: var(--color-yellow);
   }
 

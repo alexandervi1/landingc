@@ -32,6 +32,7 @@ const valid = {
   email: 'alex@example.com',
   message: 'Mensaje suficientemente largo para pasar la validación.',
   website: '',
+  consent: '1',
   elapsed: 9000,
 };
 
@@ -93,6 +94,23 @@ describe('handleContact', () => {
   it('rechaza un mensaje demasiado corto', async () => {
     const response = await handleContact(post({ ...valid, message: 'corto' }), env, ctx);
     expect(response.status).toBe(422);
+  });
+
+  it('rechaza el envío sin consentimiento', async () => {
+    const spy = mockResend();
+    const response = await handleContact(post({ ...valid, consent: '' }), env, ctx);
+
+    expect(response.status).toBe(422);
+    expect(await response.json()).toEqual({ error: 'consent_required' });
+    expect(spy).not.toHaveBeenCalled();
+  });
+
+  it('rechaza el envío con consentimiento falso', async () => {
+    const spy = mockResend();
+    const response = await handleContact(post({ ...valid, consent: 'false' }), env, ctx);
+
+    expect(response.status).toBe(422);
+    expect(spy).not.toHaveBeenCalled();
   });
 
   it('rechaza un cuerpo que no es JSON', async () => {

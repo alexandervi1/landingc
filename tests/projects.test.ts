@@ -85,11 +85,11 @@ describe('estado actual de los datos', () => {
 });
 
 describe('sectionNumbers', () => {
-  it('numera de 1 a 3 cuando hay proyectos visibles', () => {
-    expect(sectionNumbers(true)).toEqual({ projects: 1, about: 2, contact: 3 });
+  it('numera de 1 a 4 cuando hay proyectos visibles', () => {
+    expect(sectionNumbers(true)).toEqual({ projects: 1, about: 2, method: 3, contact: 4 });
   });
 
-  it('renumera sin proyectos: proyectos en 0 y contacto en 2', () => {
-    expect(sectionNumbers(false)).toEqual({ projects: 0, about: 1, contact: 2 });
+  it('renumera sin proyectos: proyectos en 0, método en 2 y contacto en 3', () => {
+    expect(sectionNumbers(false)).toEqual({ projects: 0, about: 1, method: 2, contact: 3 });
   });
 });
