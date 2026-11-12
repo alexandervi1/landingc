@@ -73,6 +73,51 @@ node scripts/check-content.mjs ruta/a/fixture
 
 Los tres proveedores que aparecen en el aviso son Cloudflare, Resend y Google (buzón de destino). Si cambia el buzón, actualiza las dos listas de "Quién más interviene" / "Who else is involved".
 
+### Retención de 12 meses: rutina manual
+
+El aviso declara que los mensajes se conservan 12 meses. El código del sitio no almacena los mensajes; se envían a Resend y llegan al buzón de Gmail. No hay una base de datos ni una tarea de limpieza en el sitio.
+
+El recorrido de un mensaje es:
+
+```
+visitante → POST /api/contact → Resend → hola@alexandervillalva.uk
+                                            ↓
+                              Cloudflare Email Routing
+                                            ↓
+                                     buzón de Gmail
+```
+
+La única copia operativa vive en Gmail. Por tanto, el plazo de 12 meses **depende de una rutina manual**:
+
+1. Buscar en el buzón con `older_than:12m`.
+2. Revisar que los resultados son mensajes del formulario.
+3. Borrarlos. En Gmail, borrar un mensaje lo mueve a la Papelera, donde permanece hasta 30 días.
+4. Si el objetivo es eliminarlo definitivamente, vaciar también la Papelera. Mientras no se vacíe, el mensaje sigue existiendo y puede recuperarse.
+
+Gmail no tiene una regla nativa de borrado por antigüedad: los filtros actúan sobre el correo entrante, no sobre la fecha del mensaje. Un filtro no puede programar un borrado futuro.
+
+Dos límites que conviene tener presentes:
+
+- Si el buzón está respaldado en otro sitio (Google Takeout, copia local), borrar del buzón no borra la copia.
+- Resend conserva sus propios registros de envío según su política, fuera de este control. El aviso habla de los mensajes, no de esos registros.
+
+Este apartado documenta el estado actual. Cualquier automatización o cambio de plazo requiere una decisión explícita antes de tocar el código o el aviso.
+
+### Opciones de retención (ninguna implementada)
+
+> Ninguna de estas opciones está implementada. La tabla compara cómo cumpliría cada una el plazo; **no es una conclusión legal**.
+
+| Opción | Cuándo se borra realmente | Papelera de Gmail | Copias externas | Registros de Resend |
+|---|---|---|---|---|
+| **A. Manual con recordatorio** | Al ejecutar la búsqueda. Con cadencia trimestral, un mensaje puede vivir hasta un trimestre de más | El borrado mueve a Papelera; desaparece a los 30 días. Hasta entonces el mensaje sigue existiendo | No las alcanza | Sin cambios |
+| **B. Apps Script con disparador mensual** | Depende del día en que esté programado el disparador: hasta aproximadamente un mes después de cumplir los 12 | Depende de la llamada: mover a Papelera deja 30 días de margen; el borrado permanente requiere la API avanzada | No las alcanza | Sin cambios |
+| **C. Etiqueta + revisión trimestral** | Al revisar. No garantiza el borrado al cumplir 12 meses: acota el exceso a un trimestre | Igual que A | No las alcanza | Sin cambios |
+| **D. Plazo corto (p. ej. 30 días)** | Al responder y borrar. El momento depende de cuándo respondas y elimines el correo, así que **no garantiza un máximo de 30 días** | 30 días más si no se vacía | No las alcanza | Sin cambios |
+
+Ninguna opción basada en revisión periódica borra a los 12 meses exactos. La revisión trimestral acota el exceso a un trimestre; un disparador diario lo acotaría a un día.
+
+Las cuestiones sobre si un plazo es adecuado, si la Papelera cuenta como conservación o si hay que mencionar los registros de Resend requieren revisión legal. Este documento no las resuelve.
+
 ## CI y despliegue
 
 `.github/workflows/ci.yml` tiene dos jobs:

@@ -12,6 +12,10 @@ const { locale, dict } = Astro.props;
 const navLabel = locale === 'es' ? 'Navegación principal' : 'Main navigation';
 const langLabel = locale === 'es' ? 'Idioma' : 'Language';
 const hasProjects = visibleProjects().length > 0;
+// Las anclas se resuelven contra la portada del idioma actual: el menú también
+// se renderiza en /privacidad y /en/privacy, donde esas secciones no existen.
+const home = localePath(locale);
+const anchor = (id: string) => `${home}#${id}`;
 ---
 
 <header class="nav" data-nav>
@@ -23,12 +27,12 @@ const hasProjects = visibleProjects().length > 0;
 
     <div class="nav-right">
       <nav class="nav-links" id="nav-menu" aria-label={navLabel} data-nav-menu>
-        {hasProjects && <a class="label" href="#proyectos">{dict.nav.projects}</a>}
-        <a class="label" href="#sobre-mi">{dict.nav.about}</a>
-        <a class="btn btn-ghost nav-cta-mobile" href="#contacto">{dict.nav.cta}</a>
+        {hasProjects && <a class="label" href={anchor('proyectos')}>{dict.nav.projects}</a>}
+        <a class="label" href={anchor('sobre-mi')}>{dict.nav.about}</a>
+        <a class="btn btn-ghost nav-cta-mobile" href={anchor('contacto')}>{dict.nav.cta}</a>
       </nav>
 
-      <a class="btn btn-ghost nav-cta" href="#contacto">{dict.nav.cta}</a>
+      <a class="btn btn-ghost nav-cta" href={anchor('contacto')}>{dict.nav.cta}</a>
 
       <div class="lang" role="group" aria-label={langLabel}>
         <a
