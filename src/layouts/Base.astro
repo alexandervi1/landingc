@@ -51,7 +51,14 @@ const person = {
 <!doctype html>
 <html lang={locale}>
   <head>
-    <script is:inline>document.documentElement.classList.add('js')</script>
+    <script is:inline>
+      document.documentElement.classList.add('js');
+      // Se aplica antes del primer pintado para evitar el destello de tema.
+      try {
+        var stored = localStorage.getItem('theme');
+        if (stored === 'light' || stored === 'dark') document.documentElement.dataset.theme = stored;
+      } catch (error) {}
+    </script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
@@ -62,8 +69,19 @@ const person = {
     <link rel="alternate" hreflang="x-default" href={alternateEsUrl} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="sitemap" href="/sitemap.xml" />
-    <meta name="theme-color" content="#0d0d24" />
-    <meta name="color-scheme" content="dark" />
+    <meta
+      name="theme-color"
+      content="#0d0d24"
+      data-theme="dark"
+      media="(prefers-color-scheme: dark)"
+    />
+    <meta
+      name="theme-color"
+      content="#f4f4ee"
+      data-theme="light"
+      media="(prefers-color-scheme: light)"
+    />
+    <meta name="color-scheme" content="light dark" />
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={profile.name} />
@@ -91,6 +109,52 @@ const person = {
     <a href="#main" class="skip">{skipLabel}</a>
     <slot />
     <script>
+      import { STORAGE_KEY, nextTheme, resolveTheme } from '../lib/theme';
+
+      const root = document.documentElement;
+      const themeToggle = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
+      const prefersLight = matchMedia('(prefers-color-scheme: light)');
+      const themeMetas = document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]');
+
+      const readStored = () => {
+        try {
+          return localStorage.getItem(STORAGE_KEY);
+        } catch {
+          return null;
+        }
+      };
+
+      const apply = (theme: 'light' | 'dark') => {
+        root.dataset.theme = theme;
+        if (themeToggle) {
+          const label =
+            theme === 'light' ? themeToggle.dataset.labelDark : themeToggle.dataset.labelLight;
+          if (label) {
+            themeToggle.setAttribute('aria-label', label);
+            themeToggle.setAttribute('title', label);
+          }
+        }
+        for (const meta of themeMetas) {
+          meta.setAttribute('media', meta.dataset.theme === theme ? 'all' : 'not all');
+        }
+      };
+
+      apply(resolveTheme(readStored(), prefersLight.matches));
+
+      themeToggle?.addEventListener('click', () => {
+        const current = root.dataset.theme === 'light' ? 'light' : 'dark';
+        const next = nextTheme(current);
+        try {
+          localStorage.setItem(STORAGE_KEY, next);
+        } catch {}
+        apply(next);
+      });
+
+      prefersLight.addEventListener('change', (event) => {
+        if (readStored()) return;
+        apply(event.matches ? 'light' : 'dark');
+      });
+
       const nav = document.querySelector('[data-nav]');
       const setNav = () => nav?.classList.toggle('is-scrolled', window.scrollY > 8);
       setNav();
@@ -143,8 +207,8 @@ const person = {
         top: 12px;
         left: 12px;
         z-index: 50;
-        background: var(--color-yellow);
-        color: #0d0d24;
+        background: var(--color-highlight);
+        color: var(--color-highlight-ink);
         padding: 10px 14px;
         font-family: var(--font-mono);
         font-size: 12px;

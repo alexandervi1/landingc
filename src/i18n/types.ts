@@ -5,7 +5,7 @@ export type SocialId = 'github' | 'linkedin';
 
 export interface Dict {
   meta: { title: string; description: string };
-  a11y: { skip: string; menu: string };
+  a11y: { skip: string; menu: string; themeToLight: string; themeToDark: string };
   nav: { projects: string; about: string; cta: string };
   hero: {
     eyebrow: string;

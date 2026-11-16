@@ -6,7 +6,12 @@ export const es: Dict = {
     description:
       'Ingeniero de software full stack en Ecuador. Construyo aplicaciones web completas: modelo de datos, API, interfaz y despliegue.',
   },
-  a11y: { skip: 'Saltar al contenido', menu: 'Menú' },
+  a11y: {
+    skip: 'Saltar al contenido',
+    menu: 'Menú',
+    themeToLight: 'Activar modo claro',
+    themeToDark: 'Activar modo oscuro',
+  },
   nav: { projects: 'Proyectos', about: 'Sobre mí', cta: 'Hablemos' },
   hero: {
     eyebrow: 'Ingeniería de software',

@@ -53,6 +53,45 @@ const anchor = (id: string) => `${home}#${id}`;
       </div>
 
       <button
+        class="theme-toggle"
+        type="button"
+        aria-label={dict.a11y.themeToLight}
+        title={dict.a11y.themeToLight}
+        data-theme-toggle
+        data-label-light={dict.a11y.themeToLight}
+        data-label-dark={dict.a11y.themeToDark}
+      >
+        <svg
+          class="theme-icon icon-sun"
+          viewBox="0 0 24 24"
+          width="16"
+          height="16"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"></path>
+        </svg>
+        <svg
+          class="theme-icon icon-moon"
+          viewBox="0 0 24 24"
+          width="16"
+          height="16"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M20 14.5A8 8 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"></path>
+        </svg>
+      </button>
+
+      <button
         class="nav-toggle"
         type="button"
         aria-expanded="false"
@@ -165,6 +204,50 @@ const anchor = (id: string) => `${home}#${id}`;
     font-size: 11px;
   }
 
+  .theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 1px solid var(--color-line-strong);
+    background: transparent;
+    color: var(--color-ink);
+    cursor: pointer;
+  }
+
+  .theme-toggle:hover {
+    border-color: var(--color-ink);
+  }
+
+  /* El icono muestra el tema al que se cambia. */
+  .theme-icon {
+    display: block;
+  }
+
+  .icon-moon {
+    display: none;
+  }
+
+  :root[data-theme='light'] .icon-sun {
+    display: none;
+  }
+
+  :root[data-theme='light'] .icon-moon {
+    display: block;
+  }
+
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme]) .icon-sun {
+      display: none;
+    }
+
+    :root:not([data-theme]) .icon-moon {
+      display: block;
+    }
+  }
+
   .nav-toggle {
     display: inline-flex;
     align-items: center;
@@ -223,6 +306,10 @@ const anchor = (id: string) => `${home}#${id}`;
   }
 
   @media (max-width: 767px) {
+    .nav-right {
+      gap: 14px;
+    }
+
     .nav-links {
       position: absolute;
       top: 100%;

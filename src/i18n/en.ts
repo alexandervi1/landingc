@@ -6,7 +6,12 @@ export const en: Dict = {
     description:
       'Full stack software engineer based in Ecuador. I build complete web applications: data model, API, interface and deployment.',
   },
-  a11y: { skip: 'Skip to content', menu: 'Menu' },
+  a11y: {
+    skip: 'Skip to content',
+    menu: 'Menu',
+    themeToLight: 'Switch to light mode',
+    themeToDark: 'Switch to dark mode',
+  },
   nav: { projects: 'Projects', about: 'About', cta: "Let's talk" },
   hero: {
     eyebrow: 'Software engineering',
